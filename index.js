@@ -7,9 +7,9 @@ const pool = new Pool({
     user:'',
     password:'',
     host:'localhost',
-    database:'employee_db'
+    database:'employees_db'
 },
-console.log(`Connected to the employee_db database`)
+console.log(`Connected to the employees_db database`)
 );
 
 pool.connect();
