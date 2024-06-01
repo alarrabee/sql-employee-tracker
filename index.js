@@ -15,14 +15,14 @@ console.log(`Connected to the employees_db database`)
 );
 
 //connects to the postgreSQL database
-pool.connect();
+// pool.connect();
 
 
 
 
 
 
-//-----Initial User Prompts------------------
+//------Initial User Prompts------
 //asks the user questions. user selections are stored in the answers object
 async function promptUser(){
     try{
@@ -90,24 +90,27 @@ async function promptUser(){
             //quit
             case 'Quit':
                 console.log('You choose to quit');
-                await quit();
+                pool.end();
                 break;
             default:
                 console.log('Invalid choice');
                 break;
         }
+
     } catch (err) {
     console.log('Error', err);
     }
 }
 
-//------View All Employees-----------------
+
+//------View All Employees------
 async function viewAllEmployees(){
     try{
         const res = await pool.query(
             `SELECT employee.id AS employee_id,employee.first_name, employee.last_name, role.title AS role_title, role.salary, department.name AS department_name, CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id LEFT JOIN employee AS manager ON employee.manager_id = manager.id`);
 
         console.table(res.rows);
+        promptUser();
 
     } catch(err){
         console.log('Error executing query', err);
@@ -115,9 +118,13 @@ async function viewAllEmployees(){
 };
 
 
-//------Add Employee----------------------
+
+
+//------Add Employee------
 async function addEmployee(){
     try{
+        const roles = await pool.query("SELECT id as value, title as name from role");
+        const managers = await pool.query("select id as value, first_name || ' ' || last_name as name from employee");
         const answers = await inquirer.prompt([
             {
                 type:'input',
@@ -133,23 +140,23 @@ async function addEmployee(){
                 type:'list',
                 name:'role_id',
                 message:"What is the employee's role?",
-                choices: []
+                choices: roles.rows
             },
             {
                 type:'list',
                 name:'manager_id',
                 message:"Who is the employee's manager?",
-                choices: []
+                choices: managers.rows
             },
 
         ]);
 
         await pool.query(
             `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)`,
-            [answers.first_name, answers.last_name, answers.role_id, answers.manager_id]
-        );
+            [answers.first_name, answers.last_name, answers.role_id, answers.manager_id]);
 
         console.log("Employee Successfully Added!");
+        promptUser();
 
 
     } catch(err){
@@ -158,35 +165,33 @@ async function addEmployee(){
 };
 
 
-
-
-
-//--------Update Employee------------------------
-
+//------Update Employee------
 async function updateEmployeeRole(){
     try{
+        const roles = await pool.query("SELECT id as value, title as name from role");
+        const employees = await pool.query("select id as value, first_name || ' ' || last_name as name from employee");
         const answers = await inquirer.prompt([
             {
                 type:'list',
                 name:'id',
                 message:"Which employee do you want to update?",
-                choices: []
+                choices: employees.rows
             },
             {
                 type:'list',
                 name:'role_id',
                 message:"Which role do you want to assign the selected employee?",
-                choices: []
+                choices: roles.rows
             }
     
         ]);
     
         await pool.query(
             `UPDATE employee SET role_id = $1 WHERE id = $2`,
-            [answers.role_id, answers.id]
-        );
+            [answers.role_id, answers.id]);
 
-        console.log("Employee Successfully Updated!");   
+        console.log("Employee Successfully Updated!");
+        promptUser();   
     
 
     } catch(err){
@@ -194,17 +199,12 @@ async function updateEmployeeRole(){
     }
 };
 
-
-
-
-
-
-
-//-------View All Roles------------------
+//------View All Roles------
 async function viewAllRoles(){
     try{
-        const res = await pool.query('SELECT * FROM role');
-        console.log(res.rows);
+        const res = await pool.query('SELECT role.title, role.salary, department.name FROM role join department on role.department_id = department.id');
+        console.table(res.rows);
+        promptUser();
 
     } catch(err){
         console.log('Error executing query', err);
@@ -212,10 +212,10 @@ async function viewAllRoles(){
 };
 
 
-
-//------Add Role-------------------------
+//------Add Role------
 async function addRole(){
     try{
+        const departments = await pool.query("SELECT id as value, name as name from department");
         const answers = await inquirer.prompt([
             {
                 type:'input',
@@ -231,16 +231,17 @@ async function addRole(){
                 type:'list',
                 name:'department_id',
                 message:"Which department does the role belong to?",
-                choices: []
+                choices: departments.rows
             }
     
         ]);
     
     
-        const res = await pool.query(`INSERT INTO role ($1, $2, (SELECT id FROM department WHERE name = $3));`, 
+        const res = await pool.query(`INSERT INTO role (title, salary, department_id) values ($1, $2, $3);`, 
         [answers.title, answers.salary, answers.department_id]);
 
-        console.log('Role successfully added!');  
+        console.log('Role successfully added!'); 
+        promptUser(); 
     
     
     
@@ -250,24 +251,19 @@ async function addRole(){
 };
 
 
-
-
-
-
-
-//--------View All Departments-------------------------
+//------View All Departments------
 async function viewAllDepartments(){
     try{
         const res = await pool.query('SELECT * FROM department');
-        console.log(res.rows);
+        console.table(res.rows);
+        promptUser();
     } catch(err){
         console.log('Error executing query', err);
     }
 };
 
 
-
-//--------Add Department--------------------------
+//------Add Department------
 async function addDepartment(){
     try{
         const answers = await inquirer.prompt([
@@ -282,7 +278,8 @@ async function addDepartment(){
         VALUES($1);`, 
         [answers.name]);
 
-        console.log('Department successfully added!');   
+        console.log('Department successfully added!'); 
+        promptUser();  
 
     } catch(err){
             console.log('Error executing query', err);
@@ -292,7 +289,7 @@ async function addDepartment(){
 
 
 
-
+promptUser();
 
 
 //---------Quit--------------
@@ -309,9 +306,6 @@ async function addDepartment(){
 
 
 
-
-
-promptUser();
 
 
 //invoke using node index.js

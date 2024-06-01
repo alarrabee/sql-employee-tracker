@@ -31,26 +31,26 @@ CREATE TABLE employee (
 
 
 
---find the department id
-SELECT id FROM department WHERE name = '';
+-- --find the department id
+-- SELECT id FROM department WHERE name = '';
 
---find role id
-SELECT id FROM role WHERE title = '';
+-- --find role id
+-- SELECT id FROM role WHERE title = '';
 
---find manager
-manager AS (
-    SELECT id FROM employee WHERE first_name = 'Jane' AND last_name = 'Smith'
-);
+-- --find manager
+-- manager AS (
+--     SELECT id FROM employee WHERE first_name = 'Jane' AND last_name = 'Smith'
+-- );
 
---Add employee query
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ('First', 'Last', (SELECT id FROM role WHERE title = 'title'), (SELECT id FROM manager));
+-- --Add employee query
+-- INSERT INTO employee (first_name, last_name, role_id, manager_id)
+-- VALUES ('First', 'Last', (SELECT id FROM role WHERE title = 'title'), (SELECT id FROM manager));
 
 
 
---Add department
-INSERT INTO department (name)
-VALUES('department');
+-- --Add department
+-- INSERT INTO department (name)
+-- VALUES('department');
 
---Add role
-INSERT INTO role (title, salary, (SELECT id FROM department WHERE name = 'Name'));$1
+-- --Add role
+-- INSERT INTO role (title, salary, (SELECT id FROM department WHERE name = 'Name'));$1
