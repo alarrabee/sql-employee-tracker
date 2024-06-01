@@ -107,7 +107,7 @@ async function viewAllEmployees(){
         const res = await pool.query(
             `SELECT employee.id AS employee_id,employee.first_name, employee.last_name, role.title AS role_title, role.salary, department.name AS department_name, CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id LEFT JOIN employee AS manager ON employee.manager_id = manager.id`);
 
-        console.log(res.rows);
+        console.table(res.rows);
 
     } catch(err){
         console.log('Error executing query', err);
