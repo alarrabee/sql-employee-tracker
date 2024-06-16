@@ -1,3 +1,4 @@
+-- seeds department, role, employee tables with stated values in postgres
 INSERT INTO department (name) 
 VALUES
 ('Customer Service'),

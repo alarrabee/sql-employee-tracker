@@ -1,11 +1,13 @@
+//inquirer is used for interactive command line user interfaces
 const inquirer = require("inquirer");
-//This pool is then used to execute SQL queries and interact with the database.
+
+//Pool is used to execute SQL queries and interact with the database.
 const {Pool} = require("pg");
 
 
 //configures the PostgreSQL pool connection
 const pool = new Pool({
-    database:'test_db',
+    database:'employees_db',
     user:'postgres',
     password:'password',
     host:'localhost',
@@ -14,16 +16,11 @@ const pool = new Pool({
 console.log(`Connected to the employees_db database`)
 );
 
-//connects to the postgreSQL database
-// pool.connect();
 
 
+//------ Initial User Prompts ------//
 
-
-
-
-//------Initial User Prompts------
-//asks the user questions. user selections are stored in the answers object
+//Asks the user questions. User selections are stored in the answers object
 async function promptUser(){
     try{
         const answers = await inquirer.prompt([
@@ -87,7 +84,7 @@ async function promptUser(){
                 await addDepartment();
                 break;
 
-            //quit
+            //quit - exits the application
             case 'Quit':
                 console.log('You choose to quit');
                 pool.end();
@@ -103,7 +100,7 @@ async function promptUser(){
 }
 
 
-//------View All Employees------
+//------ View All Employees ------//
 async function viewAllEmployees(){
     try{
         const res = await pool.query(
@@ -120,7 +117,7 @@ async function viewAllEmployees(){
 
 
 
-//------Add Employee------
+//------ Add Employee ------//
 async function addEmployee(){
     try{
         const roles = await pool.query("SELECT id as value, title as name from role");
@@ -165,7 +162,7 @@ async function addEmployee(){
 };
 
 
-//------Update Employee------
+//------ Update Employee ------//
 async function updateEmployeeRole(){
     try{
         const roles = await pool.query("SELECT id as value, title as name from role");
@@ -199,7 +196,8 @@ async function updateEmployeeRole(){
     }
 };
 
-//------View All Roles------
+
+//------ View All Roles ------//
 async function viewAllRoles(){
     try{
         const res = await pool.query('SELECT role.title, role.salary, department.name FROM role join department on role.department_id = department.id');
@@ -212,7 +210,8 @@ async function viewAllRoles(){
 };
 
 
-//------Add Role------
+
+//------ Add Role ------//
 async function addRole(){
     try{
         const departments = await pool.query("SELECT id as value, name as name from department");
@@ -251,7 +250,8 @@ async function addRole(){
 };
 
 
-//------View All Departments------
+
+//------ View All Departments ------//
 async function viewAllDepartments(){
     try{
         const res = await pool.query('SELECT * FROM department');
@@ -263,7 +263,7 @@ async function viewAllDepartments(){
 };
 
 
-//------Add Department------
+//------ Add Department ------//
 async function addDepartment(){
     try{
         const answers = await inquirer.prompt([
@@ -288,24 +288,8 @@ async function addDepartment(){
 
 
 
-
+// invokes the application
 promptUser();
 
 
-//---------Quit--------------
 
-// async function quit(){
-//     try{
-//         const res = await pool.query('SELECT * FROM department');
-//         console.log(res.rows);
-//     } catch(err){
-//         console.log('Error executing query', err);
-//     }
-// };
-
-
-
-
-
-
-//invoke using node index.js
