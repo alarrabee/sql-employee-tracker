@@ -1,10 +1,10 @@
 Boot Camp Module 12 Challenge
 
 # Description
-
+This is the week 12 Module Challenge for the U of M Coding Bootcamp
 
 # SQL: Employee Tracker
-
+The challenge was to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and PostgreSQL.
 
 ## User Story
 ```md
@@ -38,12 +38,36 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 
 ## Installation Instructions
+Prerequisites
+- Node.js
+- npm
+- PostgreSQL
 
+1. Clone the repository
+    ```bash
+   https://github.com/alarrabee/sql-employee-tracker.git
+   ```
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+3. Connecting to PostgreSQL
+   Set up .env file with credentials
+   
+4. Create database in PostgreSQL with schema.sql
+
+5. Insert seeds in PostgreSQL with seeds.sql
+
+6. Invoke application
+   ```bash
+   node index.js
+   ```
 
 ## Usage Information
-
+Using the command-line select a prompt and answer with desired information
 
 ### Demo
 
 
 ## Acknowledgments
+Guidance provided by edX Web Development Tutor Team (Megan Meyers)
