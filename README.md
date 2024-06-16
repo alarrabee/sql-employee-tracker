@@ -68,7 +68,7 @@ Prerequisites
 Using the command-line select a prompt and answer with desired information
 
 ### Demo
-
+[View a video demonstration of this application](https://drive.google.com/file/d/12X0BIsZc5raE9-B0WqQG9PY3-dbdXgxi/view?usp=sharing)
 
 ## Acknowledgments
 Guidance provided by edX Web Development Tutor Team (Megan Meyers)
