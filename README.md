@@ -35,6 +35,7 @@ THEN I am prompted to select an employee to update and their new role and this i
 ```
 
 ## Application Screenshot
+![image](https://github.com/alarrabee/sql-employee-tracker/assets/149320486/d2ce1553-79e1-4387-9f36-5d38c5f84af9)
 
 
 ## Installation Instructions
