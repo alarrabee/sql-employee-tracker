@@ -1,15 +1,21 @@
 //inquirer is used for interactive command line user interfaces
 const inquirer = require("inquirer");
 
+//loads environment variables from the .env file
+require('dotenv').config();
+const dbName = process.env.DB_NAME;
+const dbUser = process.env.DB_USER;
+const dbPassword = process.env.DB_PASSWORD;
+
 //Pool is used to execute SQL queries and interact with the database.
 const {Pool} = require("pg");
 
 
 //configures the PostgreSQL pool connection
 const pool = new Pool({
-    database:'employees_db',
-    user:'postgres',
-    password:'password',
+    database: dbName,
+    user: dbUser,
+    password: dbPassword,
     host:'localhost',
     port: 5432
 },
